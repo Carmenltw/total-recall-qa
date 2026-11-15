@@ -439,12 +439,14 @@ def run_generation_evaluation(args):
                         gt_answer = str(answer.get('value', '')) if isinstance(answer, dict) else str(answer)
                     else:
                         gt_answer = ''
+                    t0 = time.perf_counter()
                     if args.generation_method == 'no_retrieval':
                         reasoning_path, prediction = model.inference(query)
                     elif args.generation_method == 'single_retrieval':
                         reasoning_path, prediction = model.inference(query, qid=qid)
                     else:
                         reasoning_path, prediction = model.inference(query, qid=qid)
+                    elapsed = time.perf_counter() - t0
                     soft_matches = {}
                     for pct in tolerance_percentages:
                         match_result = soft_exact_match(prediction, gt_answer, decimals=3, tolerance_pct=pct)
@@ -465,6 +467,7 @@ def run_generation_evaluation(args):
                         "exact_match": float(1 if exact_match else 0),
                         "soft_matches": soft_matches,
                         "reasoning_path": path_for_output,
+                        "time_sec": elapsed,
                     }
                     if args.generation_method == 'deep_research':
                         _, retrieval_metrics, trec_lines = _deep_research_interleave_and_metrics(qid, reasoning_path, args, _get_passage_id)
@@ -884,12 +887,14 @@ def _generation_worker(rank, device_id, args, items_subset):
                     gt_answer = str(answer.get('value', '')) if isinstance(answer, dict) else str(answer)
                 else:
                     gt_answer = ''
+                t0 = time.perf_counter()
                 if args.generation_method == 'no_retrieval':
                     reasoning_path, prediction = model.inference(query)
                 elif args.generation_method == 'single_retrieval':
                     reasoning_path, prediction = model.inference(query, qid=qid)
                 else:
                     reasoning_path, prediction = model.inference(query, qid=qid)
+                elapsed = time.perf_counter() - t0
                 soft_matches = {}
                 for pct in tolerance_percentages:
                     match_result = soft_exact_match(prediction, gt_answer, decimals=3, tolerance_pct=pct)
@@ -909,6 +914,7 @@ def _generation_worker(rank, device_id, args, items_subset):
                     "exact_match": float(1 if exact_match else 0),
                     "soft_matches": soft_matches,
                     "reasoning_path": path_for_output,
+                    "time_sec": elapsed,
                 }
                 if args.generation_method == 'deep_research':
                     _, retrieval_metrics, trec_lines = _deep_research_interleave_and_metrics(qid, reasoning_path, args, _get_passage_id)

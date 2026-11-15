@@ -23,7 +23,7 @@ subset=test
 
 model=Qwen/Qwen2.5-7B-Instruct
 generation_method=deep_research
-retriever=e5
+retriever=spladepp
 deep_research_model=react
 
 retrieval_eval_ks="3 10 100 1000"

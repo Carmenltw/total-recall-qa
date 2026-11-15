@@ -31,7 +31,11 @@ class BasicRAG:
         if args.model_source == 'api':
             self.generator = LLMGenerator_api(args.model_name_or_path)
         elif args.model_source == 'hf_local':
-            backbone_model = transformers.AutoModelForCausalLM.from_pretrained(args.model_name_or_path, dtype=torch.bfloat16).to(device) # attn_implementation="eager"
+            backbone_model = transformers.AutoModelForCausalLM.from_pretrained(
+                args.model_name_or_path, 
+                load_in_8bit=True, 
+                device_map="auto"
+            )
             backbone_tokenizer = transformers.AutoTokenizer.from_pretrained(args.model_name_or_path)
             self.generator = LLMGenerator_hf_local(backbone_model, backbone_tokenizer, device, args)
         else:
