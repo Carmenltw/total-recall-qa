@@ -25,6 +25,7 @@ python c5_task_evaluation/run_evaluation.py \
   --subset test \
   --dataset_file dataset/TRQA/E-Commerce/test/queries_ecommerce_test.jsonl \
   --qrel_file dataset/TRQA/E-Commerce/test/trec_qrels_ecommerce_test.txt \
+  --corpus_path corpus_datasets/corpus/corpus_ecommerce_rewritten.jsonl \
   --model Qwen/Qwen2.5-7B-Instruct \
   --generation_method single_retrieval \
   --retriever spladepp \
