@@ -6,6 +6,7 @@ import torch
 import requests
 import transformers
 from bs4 import BeautifulSoup
+import quant_config
 
 from utils.general_utils import passages2string
 from c5_task_evaluation.src.llm_generator import LLMGenerator_api, LLMGenerator_hf_local, StopOnSequence
