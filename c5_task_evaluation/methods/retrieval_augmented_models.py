@@ -6,7 +6,6 @@ import torch
 import requests
 import transformers
 from bs4 import BeautifulSoup
-import quant_config
 
 from utils.general_utils import passages2string
 from c5_task_evaluation.src.llm_generator import LLMGenerator_api, LLMGenerator_hf_local, StopOnSequence
@@ -32,6 +31,7 @@ class BasicRAG:
         if args.model_source == 'api':
             self.generator = LLMGenerator_api(args.model_name_or_path)
         elif args.model_source == 'hf_local':
+            quant_config = transformers.BitsAndBytesConfig(load_in_8bit=True)
             backbone_model = transformers.AutoModelForCausalLM.from_pretrained(
                 args.model_name_or_path, 
                 quantization_config=quant_config, 
