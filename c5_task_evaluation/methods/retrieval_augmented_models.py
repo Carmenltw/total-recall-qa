@@ -33,7 +33,7 @@ class BasicRAG:
         elif args.model_source == 'hf_local':
             backbone_model = transformers.AutoModelForCausalLM.from_pretrained(
                 args.model_name_or_path, 
-                load_in_8bit=True, 
+                quantization_config=quant_config, 
                 device_map="auto"
             )
             backbone_tokenizer = transformers.AutoTokenizer.from_pretrained(args.model_name_or_path)
